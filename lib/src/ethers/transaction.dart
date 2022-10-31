@@ -302,12 +302,17 @@ class TransactionResponse extends Transaction<_TransactionResponseImpl> {
 
   /// Wait for this [hash] transaction to be mined with [confirms] confirmations, same as [Provider.waitForTransaction].
   Future<TransactionReceipt> wait([int? confirms]) async {
-    return TransactionReceipt._(
-      await promiseToFuture<_TransactionReceiptImpl>(callMethod(
-        this.impl,
-        'wait',
-        confirms != null ? [confirms] : [],
-      )),
-    );
+    try {
+      return TransactionReceipt._(
+        await promiseToFuture<_TransactionReceiptImpl>(callMethod(
+          this.impl,
+          'wait',
+          confirms != null ? [confirms] : [],
+        )),
+      );
+    } catch (e) {
+      final Map<String, dynamic> error = jsonDecode(stringify(e));
+      throw error;
+    }
   }
 }
