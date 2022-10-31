@@ -311,6 +311,7 @@ class TransactionResponse extends Transaction<_TransactionResponseImpl> {
         )),
       );
     } catch (e) {
+      print('Throwing error from WAIT()');
       final Map<String, dynamic> error = jsonDecode(stringify(e));
       throw error;
     }
